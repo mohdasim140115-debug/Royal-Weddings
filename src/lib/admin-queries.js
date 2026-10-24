@@ -11,7 +11,12 @@ export function bookingWhere(sp = {}) {
   if (from || to) where.eventDate = { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) };
   const q = typeof sp.q === "string" ? sp.q.trim().slice(0, 80) : "";
   if (q) {
-    where.OR = [{ reference: { contains: q.toUpperCase() } }, { customerName: { contains: q } }, { phone: { contains: q.replace(/\s/g, "") } }, { email: { contains: q.toLowerCase() } }];
+    where.OR = [
+      { reference: { contains: q, mode: "insensitive" } },
+      { customerName: { contains: q, mode: "insensitive" } },
+      { phone: { contains: q.replace(/\s/g, "") } },
+      { email: { contains: q, mode: "insensitive" } },
+    ];
   }
   return where;
 }

@@ -7,6 +7,9 @@ const nextConfig = {
   turbopack: {
     rules: {
       "*.css": {
+        // Only our own stylesheets: Next internals (e.g. next/font CSS) and
+        // node_modules must not go through the Tailwind loader.
+        condition: { not: "foreign" },
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },
@@ -14,6 +17,8 @@ const nextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Admin uploads stored in Vercel Blob.
+    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
   },
   async headers() {
     return [

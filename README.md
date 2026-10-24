@@ -240,17 +240,17 @@ audit-logged. Public pages refresh immediately after admin edits.
 
 ## Database
 
-Prisma schema: [prisma/schema.prisma](prisma/schema.prisma). Local development uses **SQLite** so
-the project runs with zero setup. For production use **PostgreSQL**:
+PostgreSQL on **Neon**, connected through Vercel → Storage (custom prefix `DATABASE`, so Vercel
+sets `DATABASE_URL` and `DATABASE_URL_UNPOOLED`). Schema: [prisma/schema.prisma](prisma/schema.prisma).
 
-1. Change `provider = "sqlite"` to `provider = "postgresql"` in `schema.prisma`.
-2. Set `DATABASE_URL` to your Postgres URL.
-3. `npx prisma migrate dev --name init` (locally) → commit `prisma/migrations` →
-   `npx prisma migrate deploy` in production.
-4. `npm run db:seed` once (or create your own data in the admin).
+- Local development uses the same variables in `.env` (copy them from the database's `.env.local` tab).
+  Note that this points your local site at the live database — create a Neon branch for a separate
+  development database if you want to test without touching real data.
+- Schema changes: `npm run db:migrate -- --name what-changed` locally, commit `prisma/migrations`.
+  `npm run build` runs `prisma migrate deploy`, so Vercel applies pending migrations on each deploy.
+- `npm run db:seed` loads the demo catalogue, the garage cities and the admin account (safe to re-run).
 
-All field types are portable. Statuses are plain strings documented in the schema. Money is stored
-as whole rupees.
+Money is stored as whole rupees. Statuses are plain strings documented in the schema.
 
 ---
 
@@ -269,9 +269,9 @@ npm start
   revalidated every 5 minutes (ISR).
 - Run behind a reverse proxy that sets `X-Real-IP` (Vercel and most hosts do) so rate limiting
   sees real client IPs. The built-in rate limiter is in-memory; use Redis for multi-instance setups.
-- **Uploads** are written to `UPLOAD_DIR` (default `./uploads`), which must be persistent. On
-  serverless hosts (e.g. Vercel) switch to object storage (S3/R2) in
-  `src/app/api/admin/cars/[id]/images/route.js`.
+- **Uploads** go to **Vercel Blob** when `BLOB_READ_WRITE_TOKEN` is set (Vercel → Storage → Blob →
+  connect to the project). Without it they are written to `UPLOAD_DIR` (default `./uploads`), which
+  needs a persistent disk.
 - Set `NEXT_PUBLIC_SITE_URL` to the production domain.
 
 ---

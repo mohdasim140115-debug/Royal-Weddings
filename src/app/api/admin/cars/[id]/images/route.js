@@ -1,13 +1,11 @@
 import crypto from "node:crypto";
-import { mkdir, writeFile, unlink } from "node:fs/promises";
-import path from "node:path";
 import { prisma } from "@/lib/db";
 import { handler, json, error } from "@/lib/http";
 import { requireAdminApi } from "@/lib/auth";
 import { clean } from "@/lib/validation";
 import { audit } from "@/lib/audit";
 import { refreshPublicPages } from "@/lib/revalidate";
-import { UPLOAD_ROOT } from "@/lib/uploads";
+import { saveImage, deleteImage } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 
@@ -36,14 +34,12 @@ export const POST = handler(async (request, { params }) => {
   if (!ext) return error("Only JPEG, PNG or WebP images are allowed.", 415);
 
   const name = `${crypto.randomBytes(10).toString("hex")}.${ext}`;
-  const dir = path.join(UPLOAD_ROOT, "cars", car.id);
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, name), buf);
+  const url = await saveImage(`cars/${car.id}`, name, buf, ext);
 
   const image = await prisma.carImage.create({
     data: {
       carId: car.id,
-      url: `/api/uploads/cars/${car.id}/${name}`,
+      url,
       alt: clean(form.get("alt"), 200) || `${car.make} ${car.model}`,
       sortOrder: car._count.images,
     },
@@ -60,10 +56,7 @@ export const DELETE = handler(async (request, { params }) => {
   const image = await prisma.carImage.findFirst({ where: { id: imageId || "", carId: id } });
   if (!image) return error("Image not found.", 404);
   await prisma.carImage.delete({ where: { id: image.id } });
-  if (image.url.startsWith("/api/uploads/")) {
-    const target = path.resolve(UPLOAD_ROOT, image.url.replace("/api/uploads/", ""));
-    if (target.startsWith(UPLOAD_ROOT + path.sep)) await unlink(target).catch(() => {});
-  }
+  await deleteImage(image.url);
   refreshPublicPages();
   await audit(user.id, "DELETE_IMAGE", "car", id, { imageId: image.id });
   return json({ ok: true });
