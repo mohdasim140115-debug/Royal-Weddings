@@ -14,7 +14,7 @@ export default function PackagesTeaser({ packages }) {
             Open the builder <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </div>
-        <div className="rail mt-8 sm:mt-10 sm:grid-cols-2 sm:gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 md:grid-cols-3">
           {packages.map((p) => (
             <Link key={p.id} href={`/wedding-packages?package=${p.slug}#builder`} className="group flex flex-col overflow-hidden border border-line/80 bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-lift">
               <div className="relative aspect-[16/10] overflow-hidden bg-sand">

@@ -1,6 +1,12 @@
 # Image credits
 
-## Car photographs — Wikimedia Commons
+## Car photographs
+
+Thar, Scorpio, Scorpio-N and Fortuner photos (`cars/thar-black.jpg`, `cars/scorpio-black.jpg`,
+`cars/scorpio-n-black.jpg`, `cars/fortuner-black*.jpg`) `hero/fortuner-decorated.jpg` and `wedding/couple-red-lehenga.jpg` were supplied
+by the site owner, who is responsible for having the right to use them.
+
+### Wikimedia Commons
 
 All fleet photographs are from [Wikimedia Commons](https://commons.wikimedia.org) and are used under the
 licence shown (CC BY-SA / CC BY require attribution; CC0 does not). Attribution is also shown under each
@@ -8,13 +14,6 @@ photo on the car pages. Replace them with photographs of your own black fleet be
 
 | File | Author | Licence | Source |
 | --- | --- | --- | --- |
-| cars/mahindra-thar-black.jpg | DjDavid1998 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Mahindra_Thar_Photoshoot_at_Perupalem_Beach_(West_Godavari_District,_AP,_India)_Djdavid.jpg |
-| cars/mahindra-scorpio-n-black.jpg | LuvsMG481 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:2024_Mahindra_Scorpio_Z8L_front.jpg |
-| cars/mahindra-scorpio-n-black-rear.jpg | LuvsMG481 | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:2024_Mahindra_Scorpio_Z8L_rear.jpg |
-| cars/mahindra-scorpio-classic-black.jpg | RL GNZLZ from Chile | CC BY-SA 2.0 | https://commons.wikimedia.org/wiki/File:Mahindra_Scorpio_GLX_2015_(53537807901).jpg |
-| cars/toyota-fortuner-black-rear.jpg | Retired electrician | CC0 | https://commons.wikimedia.org/wiki/File:Moscow,_Teterinsky_Lane,_Toyota_Fortuner_black,_Sept_2025_01.jpg |
-| cars/toyota-fortuner-black.jpg | Retired electrician | CC0 | https://commons.wikimedia.org/wiki/File:Moscow,_Teterinsky_Lane,_Toyota_Fortuner_black,_Sept_2025_02.jpg |
-| cars/toyota-fortuner-black-side.jpg | Retired electrician | CC0 | https://commons.wikimedia.org/wiki/File:Moscow,_Teterinsky_Lane,_Toyota_Fortuner_black,_Sept_2025_04.jpg |
 | cars/hyundai-creta-black.jpg | Chanokchon | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:2023_Hyundai_Creta_Black_Edition.jpg |
 | cars/land-rover-defender-black-front.jpg | Damian B Oh | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Land_Rover_Defender_110_L663_Santorini_Black_(3).jpg |
 | cars/land-rover-defender-black.jpg | Damian B Oh | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Land_Rover_Defender_110_P300_SE_L663_Santorini_Black_(2).jpg |

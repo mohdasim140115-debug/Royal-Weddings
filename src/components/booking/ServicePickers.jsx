@@ -113,7 +113,7 @@ export function PackagePicker({ packages, value, onChange, types }) {
           return (
             <div key={p.slug} className={`border bg-white transition-colors ${sel ? "border-ink ring-1 ring-ink" : "border-line"}`}>
               <label className="flex cursor-pointer gap-3 p-4">
-                <input type="checkbox" checked={Boolean(sel)} onChange={() => toggle(p.slug)} className="mt-1 size-[18px] shrink-0 accent-[#151515]" />
+                <input type="checkbox" checked={Boolean(sel)} onChange={() => toggle(p.slug)} className="mt-1 size-[18px] shrink-0 accent-[#09243d]" />
                 <span className="min-w-0 flex-1">
                   <span className="flex flex-wrap items-baseline justify-between gap-2">
                     <span className="font-display text-xl leading-tight">{p.name}</span>
@@ -159,7 +159,7 @@ export function AddOnPicker({ addOns, value, onChange, categories }) {
             {a.unit === "FLAT" ? (
               <label className="flex shrink-0 cursor-pointer items-center gap-3 text-sm">
                 <span className="tabular-nums">{formatINR(a.price)}</span>
-                <input type="checkbox" checked={qty(a.slug) > 0} onChange={(e) => setQty(a.slug, e.target.checked ? 1 : 0)} className="size-[18px] accent-[#151515]" aria-label={`Add ${a.name}`} />
+                <input type="checkbox" checked={qty(a.slug) > 0} onChange={(e) => setQty(a.slug, e.target.checked ? 1 : 0)} className="size-[18px] accent-[#09243d]" aria-label={`Add ${a.name}`} />
               </label>
             ) : (
               <div className="shrink-0">

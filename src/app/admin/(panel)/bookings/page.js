@@ -62,7 +62,7 @@ export default async function AdminBookingsPage({ searchParams }) {
           <input type="date" name="to" defaultValue={sp.to || ""} className="field min-h-11 py-2 text-sm" />
         </label>
         <label className="flex min-h-11 items-center gap-2 text-sm lg:col-span-2">
-          <input type="checkbox" name="request" value="1" defaultChecked={sp.request === "1"} className="size-4 accent-[#151515]" /> Only customer change requests
+          <input type="checkbox" name="request" value="1" defaultChecked={sp.request === "1"} className="size-4 accent-[#09243d]" /> Only customer change requests
         </label>
         <div className="flex gap-2 lg:col-span-4 lg:justify-end">
           <Link href="/admin/bookings" className="inline-flex min-h-11 items-center px-4 text-xs uppercase tracking-[0.14em] text-stone hover:text-ink">Reset</Link>

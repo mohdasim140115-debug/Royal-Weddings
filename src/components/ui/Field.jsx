@@ -74,7 +74,7 @@ export function Checkbox({ label, description, error, className = "", ...props }
   return (
     <div className={className}>
       <label htmlFor={id} className="flex cursor-pointer items-start gap-3">
-        <input id={id} type="checkbox" className="mt-0.5 size-[18px] shrink-0 cursor-pointer accent-[#151515]" aria-invalid={error ? "true" : undefined} {...props} />
+        <input id={id} type="checkbox" className="mt-0.5 size-[18px] shrink-0 cursor-pointer accent-[#09243d]" aria-invalid={error ? "true" : undefined} {...props} />
         <span>
           <span className="text-sm text-ink">{label}</span>
           {description && <span className="mt-0.5 block text-xs text-stone">{description}</span>}

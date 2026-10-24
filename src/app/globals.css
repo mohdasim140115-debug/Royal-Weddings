@@ -6,14 +6,21 @@
   --color-sand: #f2eee7;
   --color-linen: #e9e3d8;
   --color-line: #ded6c8;
-  --color-champagne: #c5a46d;
-  --color-champagne-soft: #e4d3b2;
-  --color-champagne-deep: #85662f; /* accessible gold for text on light grounds */
-  --color-ink: #151515;
-  --color-charcoal: #292725;
-  --color-stone: #5f5a53; /* secondary text, AA on ivory */
+  /* Brand accent = Navy #09243D. The "champagne" names are kept so every
+     component follows the theme from here:
+     champagne      → light navy tint, for accents on dark sections
+     champagne-soft → pale navy, for soft fills and hovers
+     champagne-deep → Navy #09243D, for accents on light sections */
+  --color-champagne: #9cb6d2;
+  --color-champagne-soft: #dbe4ee;
+  --color-champagne-deep: #09243d;
+  /* No black in the theme: "ink" is a deep navy used for text and dark sections. */
+  --color-ink: #09243d;
+  --color-charcoal: #22374d;
+  --color-stone: #566272; /* secondary text, AA on ivory */
   --color-burgundy: #651f32;
-  --color-navy: #10294b;
+  --color-navy: #09243d;
+  --color-navy-soft: #123a5f;
   --color-burgundy-soft: #f3e7ea;
   --color-success: #2f5d46;
   --color-danger: #9b2c2c;
@@ -22,8 +29,8 @@
   --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
 
   --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
-  --shadow-soft: 0 1px 2px rgb(21 21 21 / 0.04), 0 12px 32px -12px rgb(21 21 21 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(21 21 21 / 0.05), 0 24px 48px -20px rgb(21 21 21 / 0.25);
+  --shadow-soft: 0 1px 2px rgb(9 36 61 / 0.05), 0 12px 32px -12px rgb(9 36 61 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(9 36 61 / 0.06), 0 24px 48px -20px rgb(9 36 61 / 0.28);
 }
 
 @layer base {
@@ -99,24 +106,6 @@
   .field:focus { outline: none; border-color: var(--color-champagne-deep); box-shadow: 0 0 0 3px rgb(197 164 109 / 0.22); }
   .field[aria-invalid="true"] { border-color: var(--color-danger); }
   .field:disabled { background: var(--color-sand); color: var(--color-stone); }
-
-  /* Swipeable rail on phones, plain grid from 640px (add sm:grid-cols-* etc.). */
-  .rail {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    margin-inline: -1rem;
-    padding-inline: 1rem;
-    padding-bottom: 0.25rem;
-    scrollbar-width: none;
-  }
-  .rail::-webkit-scrollbar { display: none; }
-  .rail > * { flex: 0 0 82%; scroll-snap-align: start; }
-  @media (min-width: 640px) {
-    .rail { display: grid; overflow: visible; margin-inline: 0; padding-inline: 0; padding-bottom: 0; }
-    .rail > * { flex: none; }
-  }
 
   .prose-legal h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 0.75rem; }
   .prose-legal h3 { font-size: 1.3rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }

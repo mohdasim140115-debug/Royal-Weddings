@@ -50,9 +50,8 @@ const cars = [
     description: "A black Toyota Fortuner — tall, confident and spacious. The favourite for leading the baraat and for destination weddings.",
     highlights: ["Seats six guests", "Strong road presence", "Great for convoy lead"],
     images: [
-      { url: "/images/cars/toyota-fortuner-black.jpg", alt: "Black Toyota Fortuner parked on a street, front three-quarter view", credit: C("Retired electrician", "CC0", "Moscow, Teterinsky Lane, Toyota Fortuner black, Sept 2025 02.jpg") },
-      { url: "/images/cars/toyota-fortuner-black-side.jpg", alt: "Black Toyota Fortuner, side view", credit: C("Retired electrician", "CC0", "Moscow, Teterinsky Lane, Toyota Fortuner black, Sept 2025 04.jpg") },
-      { url: "/images/cars/toyota-fortuner-black-rear.jpg", alt: "Black Toyota Fortuner, rear three-quarter view", credit: C("Retired electrician", "CC0", "Moscow, Teterinsky Lane, Toyota Fortuner black, Sept 2025 01.jpg") },
+      { url: "/images/cars/fortuner-black.jpg", alt: "Black Toyota Fortuner, front three-quarter view" },
+      { url: "/images/cars/fortuner-black-studio.jpg", alt: "Black Toyota Fortuner on a white background" },
     ],
     pricing: rule({ baseFare: 8000, extraKmRate: 30, extraHourRate: 500, driverAllowancePerDay: 500, nightCharge: 600, outstationPerDayCharge: 2500 }),
   },
@@ -62,8 +61,7 @@ const cars = [
     description: "The new Mahindra Scorpio-N in black — modern, muscular and comfortable for family members and the bridal party.",
     highlights: ["Seats six guests", "Modern premium cabin", "Ideal for family transfers"],
     images: [
-      { url: "/images/cars/mahindra-scorpio-n-black.jpg", alt: "Dark Mahindra Scorpio-N Z8L, side view", credit: C("LuvsMG481", "CC BY-SA 4.0", "2024 Mahindra Scorpio Z8L front.jpg") },
-      { url: "/images/cars/mahindra-scorpio-n-black-rear.jpg", alt: "Dark Mahindra Scorpio-N Z8L, rear three-quarter view", credit: C("LuvsMG481", "CC BY-SA 4.0", "2024 Mahindra Scorpio Z8L rear.jpg") },
+      { url: "/images/cars/scorpio-n-black.jpg", alt: "Black Mahindra Scorpio-N in a studio" },
     ],
     pricing: rule({ baseFare: 6000, extraKmRate: 25, extraHourRate: 400, driverAllowancePerDay: 400, nightCharge: 500, outstationPerDayCharge: 2000 }),
   },
@@ -73,7 +71,7 @@ const cars = [
     description: "The iconic black Mahindra Scorpio — a dependable, spacious favourite for the baraat convoy and family transfers.",
     highlights: ["Seats six guests", "Classic Scorpio presence", "Value for convoys"],
     images: [
-      { url: "/images/cars/mahindra-scorpio-classic-black.jpg", alt: "Black Mahindra Scorpio parked on a street", credit: C("RL GNZLZ from Chile", "CC BY-SA 2.0", "Mahindra Scorpio GLX 2015 (53537807901).jpg") },
+      { url: "/images/cars/scorpio-black.jpg", alt: "Black Mahindra Scorpio Classic with red ribbons in a showroom" },
     ],
     pricing: rule({ baseFare: 5000, extraKmRate: 22, extraHourRate: 350, driverAllowancePerDay: 400, nightCharge: 400, outstationPerDayCharge: 1800 }),
   },
@@ -83,7 +81,7 @@ const cars = [
     description: "A black Mahindra Thar for a rugged, stylish groom's entry and unforgettable pre-wedding photographs.",
     highlights: ["Head-turning groom's entry", "Perfect for pre-wedding shoots", "Seats three guests"],
     images: [
-      { url: "/images/cars/mahindra-thar-black.jpg", alt: "Black Mahindra Thar on a wet beachfront road", credit: C("DjDavid1998", "CC BY-SA 4.0", "Mahindra Thar Photoshoot at Perupalem Beach (West Godavari District, AP, India) Djdavid.jpg") },
+      { url: "/images/cars/thar-black.jpg", alt: "Black Mahindra Thar on a white background" },
     ],
     pricing: rule({ baseFare: 6500, extraKmRate: 28, extraHourRate: 450, driverAllowancePerDay: 400, nightCharge: 500, outstationPerDayCharge: 2000 }),
   },
@@ -138,9 +136,9 @@ const addOns = [
 
 const weddingPackages = [
   { slug: "the-grand-arrival", name: "The Grand Arrival", tagline: "Black Defender, couture florals and a feature film", description: "Our most indulgent experience: a blacked-out Land Rover Defender dressed in bespoke florals, with a multi-camera cinematic team capturing every moment.", imageUrl: "/images/cars/land-rover-defender-black-front.jpg", inclusions: ["Land Rover Defender with chauffeur (8 hrs / 80 km)", "Signature Couture decoration", "Cinematic Signature film team", "Drone coverage (subject to permissions)"], exclusions: ["Tolls and parking", "Outstation travel and stay", "Venue permission fees"], durationText: "Wedding day, up to 8 hours of car service", suggestedCarSlug: "land-rover-defender-black", photoPackageSlug: "cinematic-signature", decorationSlug: "signature-couture", addOnSlugs: ["drone-coverage"], quoteOnly: true, sortOrder: 1 },
-  { slug: "classic-celebration", name: "Classic Celebration", tagline: "Black Fortuner with florals and two photographers", description: "A confident black Fortuner for the couple, paired with traditional and candid photography.", imageUrl: "/images/cars/toyota-fortuner-black.jpg", inclusions: ["Toyota Fortuner with chauffeur (8 hrs / 80 km)", "Classic Floral decoration", "Classic Photography (2 photographers, album)"], exclusions: ["Tolls and parking", "Extra hours and kilometres", "Outstation travel"], durationText: "One wedding day", suggestedCarSlug: "toyota-fortuner-black", photoPackageSlug: "classic-photography", decorationSlug: "classic-floral", addOnSlugs: [], sortOrder: 2 },
-  { slug: "thar-pre-wedding", name: "Thar Pre-wedding Story", tagline: "A black Thar and a two-location film", description: "A rugged black Thar for adventurous portraits, paired with a two-location pre-wedding film.", imageUrl: "/images/cars/mahindra-thar-black.jpg", inclusions: ["Mahindra Thar with chauffeur (8 hrs / 80 km)", "Ribbon & Name Plate decoration", "Pre-wedding Film"], exclusions: ["Location permits", "Tolls and parking"], durationText: "One shoot day", suggestedCarSlug: "mahindra-thar-black", photoPackageSlug: "pre-wedding-film", decorationSlug: "ribbon-and-nameplate", addOnSlugs: [], sortOrder: 3 },
-  { slug: "intimate-essentials", name: "Intimate Essentials", tagline: "Graceful, considered and within budget", description: "A black Scorpio-N with fresh florals and essential photography for intimate ceremonies.", imageUrl: "/images/cars/mahindra-scorpio-n-black.jpg", inclusions: ["Mahindra Scorpio-N with chauffeur (8 hrs / 80 km)", "Classic Floral decoration", "Essential Photography"], exclusions: ["Tolls and parking", "Albums"], durationText: "One ceremony", suggestedCarSlug: "mahindra-scorpio-n-black", photoPackageSlug: "essential-photography", decorationSlug: "classic-floral", addOnSlugs: [], sortOrder: 4 },
+  { slug: "classic-celebration", name: "Classic Celebration", tagline: "Black Fortuner with florals and two photographers", description: "A confident black Fortuner for the couple, paired with traditional and candid photography.", imageUrl: "/images/cars/fortuner-black.jpg", inclusions: ["Toyota Fortuner with chauffeur (8 hrs / 80 km)", "Classic Floral decoration", "Classic Photography (2 photographers, album)"], exclusions: ["Tolls and parking", "Extra hours and kilometres", "Outstation travel"], durationText: "One wedding day", suggestedCarSlug: "toyota-fortuner-black", photoPackageSlug: "classic-photography", decorationSlug: "classic-floral", addOnSlugs: [], sortOrder: 2 },
+  { slug: "thar-pre-wedding", name: "Thar Pre-wedding Story", tagline: "A black Thar and a two-location film", description: "A rugged black Thar for adventurous portraits, paired with a two-location pre-wedding film.", imageUrl: "/images/cars/thar-black.jpg", inclusions: ["Mahindra Thar with chauffeur (8 hrs / 80 km)", "Ribbon & Name Plate decoration", "Pre-wedding Film"], exclusions: ["Location permits", "Tolls and parking"], durationText: "One shoot day", suggestedCarSlug: "mahindra-thar-black", photoPackageSlug: "pre-wedding-film", decorationSlug: "ribbon-and-nameplate", addOnSlugs: [], sortOrder: 3 },
+  { slug: "intimate-essentials", name: "Intimate Essentials", tagline: "Graceful, considered and within budget", description: "A black Scorpio-N with fresh florals and essential photography for intimate ceremonies.", imageUrl: "/images/cars/scorpio-n-black.jpg", inclusions: ["Mahindra Scorpio-N with chauffeur (8 hrs / 80 km)", "Classic Floral decoration", "Essential Photography"], exclusions: ["Tolls and parking", "Albums"], durationText: "One ceremony", suggestedCarSlug: "mahindra-scorpio-n-black", photoPackageSlug: "essential-photography", decorationSlug: "classic-floral", addOnSlugs: [], sortOrder: 4 },
 ];
 
 const portfolio = [

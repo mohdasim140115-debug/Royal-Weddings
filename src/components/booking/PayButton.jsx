@@ -44,7 +44,7 @@ export default function PayButton({ reference, token, amount, label = "Pay advan
         name: order.businessName,
         description: `Advance for booking ${reference}`,
         prefill: order.prefill,
-        theme: { color: "#151515" },
+        theme: { color: "#09243d" },
         handler: async (resp) => {
           setState({ status: "verifying", message: "" });
           const v = await fetch("/api/payments/verify", {

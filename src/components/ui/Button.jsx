@@ -5,11 +5,12 @@ const base =
 
 const variants = {
   primary: "bg-ink text-ivory hover:bg-charcoal",
-  gold: "bg-champagne text-ink hover:bg-[#b8955c]",
+  gold: "bg-navy text-ivory ring-1 ring-ivory/20 hover:bg-navy-soft",
   outline: "border border-ink/80 text-ink hover:bg-ink hover:text-ivory",
   "outline-light": "border border-ivory/60 text-ivory hover:bg-ivory hover:text-ink",
   ghost: "text-ink hover:text-champagne-deep px-0 min-h-0",
   burgundy: "bg-burgundy text-ivory hover:bg-[#561a2a]",
+  light: "bg-ivory text-navy hover:bg-champagne-soft",
 };
 
 const sizes = { sm: "min-h-10 px-4 text-[0.72rem]", md: "", lg: "min-h-14 px-8" };

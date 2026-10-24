@@ -42,7 +42,7 @@ export default function PhotoPackageCard({ pkg, featured = false }) {
       <div className="min-h-6 flex-1" aria-hidden="true" />
       <Link
         href={`/booking?service=${SERVICE_FOR_BOOKING[pkg.serviceType]}&photo=${pkg.slug}`}
-        className={`inline-flex min-h-12 items-center justify-center text-[0.72rem] font-semibold uppercase tracking-[0.16em] transition-colors ${featured ? "bg-champagne text-ink hover:bg-ivory" : "border border-ink hover:bg-ink hover:text-ivory"}`}
+        className={`inline-flex min-h-12 items-center justify-center text-[0.72rem] font-semibold uppercase tracking-[0.16em] transition-colors ${featured ? "bg-navy text-ivory ring-1 ring-ivory/20 hover:bg-navy-soft" : "border border-ink hover:bg-ink hover:text-ivory"}`}
       >
         {priced ? "Book this package" : "Request a quote"}
       </Link>

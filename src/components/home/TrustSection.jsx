@@ -85,7 +85,7 @@ export default function TrustSection({ reviews = [], locations = [] }) {
 
       {/* Closing call to action */}
       <section aria-labelledby="contact-band-title" className="container-x pb-16 lg:pb-24">
-        <div className="relative overflow-hidden bg-burgundy px-6 py-10 text-ivory sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-12">
+        <div className="relative overflow-hidden bg-navy px-6 py-10 text-ivory sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-12">
           <span className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full border border-champagne/20" aria-hidden="true" />
           <span className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full border border-champagne/15" aria-hidden="true" />
           <div className="relative">
@@ -98,7 +98,7 @@ export default function TrustSection({ reviews = [], locations = [] }) {
             </p>
           </div>
           <div className="relative mt-6 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:shrink-0">
-            <Button href="/contact" variant="gold">Send an enquiry</Button>
+            <Button href="/contact" variant="light">Send an enquiry</Button>
             {wa && (
               <Button href={wa} variant="outline-light">
                 <MessageCircle className="size-4" aria-hidden="true" /> WhatsApp

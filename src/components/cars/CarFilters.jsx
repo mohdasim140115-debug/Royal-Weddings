@@ -112,11 +112,11 @@ export default function CarFilters({ filters, categories, makes, budgets, sorts,
             </fieldset>
             <div className="grid gap-1">
               <label className="flex min-h-10 cursor-pointer items-center gap-3 text-sm">
-                <input type="checkbox" name="decorated" value="1" defaultChecked={filters.decorated} onChange={() => apply()} className="size-[18px] accent-[#151515]" />
+                <input type="checkbox" name="decorated" value="1" defaultChecked={filters.decorated} onChange={() => apply()} className="size-[18px] accent-[#09243d]" />
                 Decoration available
               </label>
               <label className="flex min-h-10 cursor-pointer items-center gap-3 text-sm">
-                <input type="checkbox" name="chauffeur" value="1" defaultChecked={filters.chauffeur} onChange={() => apply()} className="size-[18px] accent-[#151515]" />
+                <input type="checkbox" name="chauffeur" value="1" defaultChecked={filters.chauffeur} onChange={() => apply()} className="size-[18px] accent-[#09243d]" />
                 Chauffeur-driven
               </label>
             </div>
@@ -124,7 +124,7 @@ export default function CarFilters({ filters, categories, makes, budgets, sorts,
               <label htmlFor="f-date" className={labelCls}>Event date</label>
               <input id="f-date" type="date" name="date" defaultValue={filters.date} onChange={() => apply()} className={fieldCls} />
               <label className={`mt-3 flex min-h-10 items-center gap-3 text-sm ${filters.date ? "cursor-pointer" : "opacity-50"}`}>
-                <input type="checkbox" name="available" value="1" defaultChecked={filters.hideReserved} onChange={() => apply()} className="size-[18px] accent-[#151515]" disabled={!filters.date} />
+                <input type="checkbox" name="available" value="1" defaultChecked={filters.hideReserved} onChange={() => apply()} className="size-[18px] accent-[#09243d]" disabled={!filters.date} />
                 Hide cars already reserved
               </label>
               <p className="mt-2 text-xs leading-relaxed text-stone">

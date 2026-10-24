@@ -31,14 +31,14 @@ export const metadata = {
     siteName: site.name,
     title: `${site.name} — Wedding Cars, Photography & Films`,
     description: site.description,
-    images: [{ url: "/images/cars/mahindra-thar-black.jpg", width: 1800, height: 1200, alt: "Black Mahindra Thar wedding car" }],
+    images: [{ url: "/images/cars/thar-black.jpg", width: 1000, height: 600, alt: "Black Mahindra Thar wedding car" }],
   },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
 };
 
 export const viewport = {
-  themeColor: "#151515",
+  themeColor: "#09243d",
   width: "device-width",
   initialScale: 1,
 };

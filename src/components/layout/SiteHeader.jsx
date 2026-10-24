@@ -3,9 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, UserRound, ArrowUpRight, ArrowRight, Phone } from "lucide-react";
+import { Menu, X, UserRound, ArrowRight, Phone, House, CarFront, Gem, Camera, Gift, Info, MessageCircle, ChevronRight } from "lucide-react";
 import { navigation, site, whatsappLink } from "@/config/site";
 import Logo from "./Logo";
+import QuickBookModal from "@/components/booking/QuickBookModal";
+import { openQuickBook, QUICK_BOOK_EVENT } from "@/components/booking/QuickBookButton";
+
+// Icons for the mobile menu, by link.
+const NAV_ICONS = { "/": House, "/cars": CarFront, "/cars?level=luxury": Gem, "/photography": Camera, "/wedding-packages": Gift, "/about": Info, "/contact": Phone };
 
 // Routes that open with a dark, full-bleed hero — the header starts transparent there.
 const DARK_HERO = ["/", "/photography", "/wedding-packages", "/about"];
@@ -14,6 +19,14 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  // The quick-book modal; `n` remounts it so each opening starts fresh.
+  const [book, setBook] = useState({ open: false, car: "", n: 0 });
+
+  useEffect(() => {
+    const onOpen = (e) => setBook((b) => ({ open: true, car: e.detail?.car || "", n: b.n + 1 }));
+    window.addEventListener(QUICK_BOOK_EVENT, onOpen);
+    return () => window.removeEventListener(QUICK_BOOK_EVENT, onOpen);
+  }, []);
   const closeRef = useRef(null);
   const overHero = DARK_HERO.includes(pathname) && !scrolled && !open;
 
@@ -57,10 +70,10 @@ export default function SiteHeader() {
       </a>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[var(--ease-luxe)] ${
-          overHero ? "bg-gradient-to-b from-ink/70 to-transparent text-ivory" : "border-b border-line/80 bg-ivory/95 text-ink backdrop-blur-md"
+          overHero ? "bg-navy text-ivory shadow-[0_6px_20px_-12px_rgba(0,0,0,0.6)] lg:bg-transparent lg:bg-gradient-to-b lg:from-ink/70 lg:to-transparent lg:shadow-none" : "border-b border-line/80 bg-ivory/95 text-ink backdrop-blur-md"
         }`}
       >
-        <div className="container-x flex h-[76px] items-center justify-between gap-6 lg:h-24">
+        <div className="container-x flex h-16 items-center justify-between gap-6 lg:h-[68px]">
           <Link href="/" aria-label={`${site.name} — home`} className="shrink-0">
             <Logo light={overHero} />
           </Link>
@@ -96,7 +109,7 @@ export default function SiteHeader() {
             {site.contact.phone && (
               <a
                 href={`tel:${site.contact.phone.replace(/s/g, "")}`}
-                className={`hidden min-h-12 items-center gap-2.5 rounded-md border px-4 text-[0.9rem] font-medium transition-colors xl:inline-flex ${
+                className={`hidden min-h-10 items-center gap-2.5 rounded-md border px-4 text-[0.9rem] font-medium transition-colors xl:inline-flex ${
                   overHero ? "border-ivory/70 text-ivory hover:bg-ivory/10" : "border-ink/25 text-ink hover:border-ink"
                 }`}
               >
@@ -104,12 +117,14 @@ export default function SiteHeader() {
                 {site.contact.phone}
               </a>
             )}
-            <Link
-              href="/booking"
-              className="hidden min-h-12 items-center gap-2.5 rounded-md bg-champagne px-6 text-[0.75rem] font-semibold uppercase tracking-[0.16em] text-ink shadow-[0_8px_24px_-12px_rgba(184,147,90,0.8)] transition-colors hover:bg-champagne-soft sm:inline-flex"
+            <button
+              type="button"
+              onClick={() => openQuickBook()}
+              aria-haspopup="dialog"
+              className="hidden min-h-10 items-center gap-2 rounded-md px-5 text-[0.72rem] font-semibold uppercase tracking-[0.16em] bg-navy text-ivory ring-1 ring-ivory/20 hover:bg-navy-soft shadow-[0_8px_24px_-12px_rgba(9,36,61,0.8)] transition-colors sm:inline-flex"
             >
               Book Now <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
+            </button>
             <button
               type="button"
               onClick={() => setOpen(true)}
@@ -125,45 +140,85 @@ export default function SiteHeader() {
       </header>
 
       {/* Mobile menu */}
+      <div className={`fixed inset-0 z-[55] lg:hidden ${open ? "visible" : "invisible"}`}>
+        {/* Tap outside the drawer to close. */}
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+          className={`absolute inset-0 bg-ink/50 backdrop-blur-[2px] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}
+        />
       <div
         id="mobile-menu"
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`fixed inset-0 z-[55] bg-ink text-ivory transition-opacity duration-500 lg:hidden ${open ? "visible opacity-100" : "invisible opacity-0"}`}
+        className={`absolute inset-y-0 right-0 flex w-[58vw] min-w-[14rem] max-w-xs flex-col bg-gradient-to-b from-navy to-[#061a2d] text-ivory shadow-[-20px_0_50px_-20px_rgba(0,0,0,0.7)] transition-transform duration-300 ease-[var(--ease-luxe)] ${open ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="container-x flex h-[72px] items-center justify-between">
-          <Logo light />
-          <button ref={closeRef} type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="inline-flex size-11 items-center justify-center">
-            <X className="size-6" strokeWidth={1.5} />
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-ivory/10 px-4">
+          <span className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-champagne">Menu</span>
+          <button ref={closeRef} type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="inline-flex size-10 items-center justify-center rounded-full bg-ivory/10 transition-colors hover:bg-ivory/20">
+            <X className="size-5" strokeWidth={1.75} />
           </button>
         </div>
-        <nav aria-label="Mobile" className="container-x mt-6 flex h-[calc(100dvh-96px)] flex-col overflow-y-auto pb-10">
-          <ul className="divide-y divide-ivory/10 border-y border-ivory/10">
-            {navigation.map((n, i) => (
-              <li key={n.href} style={{ transitionDelay: open ? `${80 + i * 35}ms` : "0ms" }} className={`transition-all duration-500 ${open ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"}`}>
-                <Link href={n.href} className="flex min-h-14 items-center justify-between py-3 font-display text-[1.75rem] leading-tight">
-                  {n.label}
-                  <ArrowUpRight className="size-5 text-champagne" strokeWidth={1.25} aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
+
+        <nav aria-label="Mobile" className="flex flex-1 flex-col overflow-y-auto px-3 pb-5 pt-4">
+          <ul className="space-y-1">
+            {navigation.map((n, i) => {
+              const Icon = NAV_ICONS[n.href] || ChevronRight;
+              const active = isActive(n.href);
+              return (
+                <li key={n.href} style={{ transitionDelay: open ? `${60 + i * 30}ms` : "0ms" }} className={`transition-all duration-500 ${open ? "translate-x-0 opacity-100" : "-translate-x-2 opacity-0"}`}>
+                  <Link
+                    href={n.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`flex min-h-12 items-center gap-3 rounded-xl px-2.5 transition-colors ${active ? "bg-ivory/12 ring-1 ring-ivory/15" : "hover:bg-ivory/8"}`}
+                  >
+                    <span className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${active ? "bg-ivory text-navy" : "bg-ivory/10 text-champagne"}`}>
+                      <Icon className="size-4" strokeWidth={1.7} aria-hidden="true" />
+                    </span>
+                    <span className="flex-1 text-[0.9rem] font-medium leading-tight">{n.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            <Link href="/booking" className="inline-flex min-h-13 items-center justify-center bg-champagne px-6 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-ink">
-              Book Now
-            </Link>
-            <Link href="/account" className="inline-flex min-h-13 items-center justify-center border border-ivory/30 px-6 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.16em]">
-              My Account
-            </Link>
+
+          <div className="mt-auto pt-6">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                openQuickBook();
+              }}
+              aria-haspopup="dialog"
+              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-ivory px-4 py-3 text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-navy shadow-[0_12px_30px_-12px_rgba(0,0,0,0.6)] transition-colors hover:bg-champagne-soft"
+            >
+              Book Now <ArrowRight className="size-4" aria-hidden="true" />
+            </button>
+            <div className="mt-2 grid gap-2">
+              <Link href="/account" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-ivory/20 text-[0.78rem] font-semibold hover:bg-ivory/8">
+                <UserRound className="size-4" aria-hidden="true" /> My Account
+              </Link>
+              {site.contact.phone ? (
+                <a href={`tel:${site.contact.phone.replace(/s/g, "")}`} className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-ivory/20 text-[0.78rem] font-semibold hover:bg-ivory/8">
+                  <Phone className="size-4" aria-hidden="true" /> Call us
+                </a>
+              ) : (
+                wa && (
+                  <a href={wa} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-ivory/20 text-[0.78rem] font-semibold hover:bg-ivory/8">
+                    <MessageCircle className="size-4" aria-hidden="true" /> WhatsApp
+                  </a>
+                )
+              )}
+            </div>
+            <p className="mt-4 text-center text-[0.55rem] uppercase tracking-[0.22em] text-ivory/45">Mewat · Wedding Car Rental</p>
           </div>
-          {wa && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-6 text-sm text-ivory/70 underline-offset-4 hover:underline">
-              Chat with us on WhatsApp
-            </a>
-          )}
         </nav>
       </div>
+      </div>
+      <QuickBookModal key={book.n} open={book.open} initialCar={book.car} onClose={() => setBook((b) => ({ ...b, open: false }))} />
     </>
   );
 }

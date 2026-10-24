@@ -16,7 +16,7 @@ export default function FieldInput({ field, value, onChange, error, categories =
     case "boolean":
       return (
         <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
-          <input type="checkbox" {...common} checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} className="size-4 accent-[#151515]" />
+          <input type="checkbox" {...common} checked={Boolean(value)} onChange={(e) => onChange(e.target.checked)} className="size-4 accent-[#09243d]" />
           {field.label}
         </label>
       );

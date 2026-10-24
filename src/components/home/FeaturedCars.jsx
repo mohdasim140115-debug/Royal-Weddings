@@ -31,7 +31,7 @@ export default function FeaturedCars({ cars }) {
         </nav>
 
         {cars.length > 0 ? (
-          <div className="rail mt-8 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {cars.map((car) => (
               <CarCard key={car.id} car={car} />
             ))}

@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { Users, Briefcase, Snowflake, UserCheck, Flower2, Check, Calculator } from "lucide-react";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { buttonClass } from "@/components/ui/Button";
+import QuickBookButton from "@/components/booking/QuickBookButton";
 import Notice from "@/components/ui/Notice";
 import CarGallery from "@/components/cars/CarGallery";
 import CarCard from "@/components/cars/CarCard";
@@ -120,10 +121,12 @@ export default async function CarDetailPage({ params, searchParams }) {
             {price.sub && <p className="mt-1 text-sm text-stone">{price.sub}</p>}
             {price.minimum && <p className="text-sm text-stone">{price.minimum}</p>}
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <Button href={`/booking?${carry}`}>Book this car</Button>
-              <Button href={`/booking?${carry}`} variant="outline">
+              <QuickBookButton car={car.slug} href={`/booking?${carry}`} className={buttonClass("primary")}>
+                Book this car
+              </QuickBookButton>
+              <QuickBookButton car={car.slug} href={`/booking?${carry}`} className={buttonClass("outline")}>
                 <Calculator className="size-4" aria-hidden="true" /> Estimate price
-              </Button>
+              </QuickBookButton>
             </div>
           </div>
 

@@ -1,5 +1,4 @@
 import Hero from "@/components/home/Hero";
-import CarTypeStrip from "@/components/home/CarTypeStrip";
 import ServiceSelector from "@/components/home/ServiceSelector";
 import FeaturedCars from "@/components/home/FeaturedCars";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -30,7 +29,7 @@ export default async function HomePage() {
     name: site.name,
     description: site.description,
     url: site.url,
-    image: `${site.url}/images/cars/mahindra-thar-black.jpg`,
+    image: `${site.url}/images/cars/thar-black.jpg`,
     ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
     ...(site.contact.email ? { email: site.contact.email } : {}),
     ...(site.contact.address ? { address: site.contact.address } : {}),
@@ -39,7 +38,6 @@ export default async function HomePage() {
   return (
     <>
       <Hero cars={cars} />
-      <CarTypeStrip cars={cars} />
       <ServiceSelector />
       <FeaturedCars cars={cars} />
       <HowItWorks />

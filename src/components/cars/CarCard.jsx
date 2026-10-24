@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Users, Briefcase, Snowflake, Flower2, ArrowUpRight } from "lucide-react";
 import CarImage from "@/components/ui/CarImage";
+import QuickBookButton from "@/components/booking/QuickBookButton";
 import { pricingSummary, carName } from "@/lib/car-display";
 import { LUXURY_LABELS } from "@/lib/format";
 
@@ -57,13 +58,14 @@ export default function CarCard({ car, availability, bookingQuery = "", layout =
             <p className="font-display text-[1.6rem] leading-none">{price.headline}</p>
             <p className="mt-1 text-[0.68rem] text-stone">{[price.sub, price.minimum].filter(Boolean).join(" · ") || "Starting price"}</p>
           </div>
-          <Link
+          <QuickBookButton
+            car={car.slug}
             href={bookHref}
             aria-label={`Book ${name}`}
-            className="relative z-10 inline-flex min-h-10 items-center bg-ink px-4 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-burgundy"
+            className="relative z-10 inline-flex min-h-10 items-center bg-ink px-4 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-ivory transition-colors hover:bg-navy"
           >
             Book
-          </Link>
+          </QuickBookButton>
         </div>
       </div>
     </article>
