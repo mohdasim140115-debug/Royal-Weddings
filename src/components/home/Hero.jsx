@@ -16,8 +16,8 @@ export default function Hero({ cars = [] }) {
     <section aria-labelledby="hero-title" className="relative bg-ink text-ivory">
       <div className="relative overflow-hidden ">
         {/* Photograph: a band on mobile; full-bleed on desktop with the car on the right. */}
-        <div className="relative h-[44vh] max-h-[400px] min-h-[280px] lg:absolute lg:inset-y-0 lg:left-[36%] lg:right-0 lg:h-auto lg:max-h-none">
-          <Image src={hero.image} alt={hero.imageAlt} fill priority sizes="(min-width: 1024px) 64vw, 100vw" className="object-cover object-[45%_65%] lg:object-[40%_70%]" />
+        <div className="relative aspect-[71/54] max-h-[440px] w-full lg:absolute lg:aspect-auto lg:w-auto lg:inset-y-0 lg:left-[36%] lg:right-0 lg:h-auto lg:max-h-none">
+          <Image src={hero.image} alt={hero.imageAlt} fill priority sizes="(min-width: 1024px) 64vw, 100vw" className="object-cover object-center lg:object-[40%_70%]" />
           {/* Warm dusk tint + readable left side */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#2a1a10]/30 via-transparent to-[#3b2414]/25 mix-blend-multiply" aria-hidden="true" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-ink/50 lg:bg-gradient-to-r lg:from-ink lg:via-ink/10 lg:to-transparent" aria-hidden="true" />
@@ -37,11 +37,20 @@ export default function Hero({ cars = [] }) {
               <span className="block text-[2.5rem] font-medium sm:text-5xl lg:text-[3.9rem]">Baraat ke liye</span>
               <span className="mt-1 block text-[2.8rem] italic text-champagne sm:text-[3.4rem] lg:text-[4.4rem]">Man Pasand Car</span>
             </h1>
-            <p className="animate-rise-delay-2 mt-6 max-w-md text-[1.02rem] leading-relaxed text-ivory/85 lg:text-[1.15rem]">
+            <p className="animate-rise-delay-2 mt-4 max-w-md text-[0.98rem] sm:mt-6 sm:text-[1.02rem] leading-relaxed text-ivory/85 lg:text-[1.15rem]">
               Mewat mein sabse kam price par apni man pasand car book karein — decoration, chauffeur aur saari service ek saath.
             </p>
 
-            <ul className="animate-rise-delay-2 mt-7 grid grid-cols-3 gap-3 sm:flex sm:gap-5">
+            {/* Phones: compact chips. Tablet & desktop: icons with dividers. */}
+            <ul className="animate-rise-delay-2 mt-5 flex flex-wrap gap-2 sm:hidden">
+              {FEATURES.map(({ icon: Icon, line1, line2 }) => (
+                <li key={line1} className="flex items-center gap-1.5 rounded-full border border-champagne/40 bg-ivory/5 px-3 py-1.5 text-[0.72rem] text-ivory/90">
+                  <Icon className="size-3.5 text-champagne" strokeWidth={1.75} aria-hidden="true" />
+                  {line1} {line2}
+                </li>
+              ))}
+            </ul>
+            <ul className="animate-rise-delay-2 mt-7 hidden sm:flex sm:gap-5">
               {FEATURES.map(({ icon: Icon, line1, line2 }, i) => (
                 <li key={line1} className={`flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-3 ${i > 0 ? "sm:border-l sm:border-ivory/20 sm:pl-5" : ""}`}>
                   <span className="flex size-11 shrink-0 sm:size-12 items-center justify-center rounded-full border border-champagne/80 bg-ink/40 text-champagne">
@@ -56,10 +65,10 @@ export default function Hero({ cars = [] }) {
               ))}
             </ul>
 
-            <div className="animate-rise-delay-2 mt-8 flex flex-wrap items-center gap-5">
+            <div className="animate-rise-delay-2 mt-7 flex flex-wrap items-center gap-5 sm:mt-8">
               <Link
                 href="/cars"
-                className="inline-flex min-h-14 items-center gap-3 rounded-md bg-champagne px-7 text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-ink shadow-[0_10px_30px_-12px_rgba(197,164,109,0.9)] transition-colors hover:bg-champagne-soft"
+                className="inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-md bg-champagne px-7 sm:w-auto text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-ink shadow-[0_10px_30px_-12px_rgba(197,164,109,0.9)] transition-colors hover:bg-champagne-soft"
               >
                 Explore Wedding Cars <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
