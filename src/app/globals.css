@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Royal Wedding design tokens ───────────────────────────── */
+@theme {
+  --color-ivory: #faf8f3;
+  --color-sand: #f2eee7;
+  --color-linen: #e9e3d8;
+  --color-line: #ded6c8;
+  --color-champagne: #c5a46d;
+  --color-champagne-soft: #e4d3b2;
+  --color-champagne-deep: #85662f; /* accessible gold for text on light grounds */
+  --color-ink: #151515;
+  --color-charcoal: #292725;
+  --color-stone: #5f5a53; /* secondary text, AA on ivory */
+  --color-burgundy: #651f32;
+  --color-navy: #10294b;
+  --color-burgundy-soft: #f3e7ea;
+  --color-success: #2f5d46;
+  --color-danger: #9b2c2c;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, sans-serif;
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-soft: 0 1px 2px rgb(21 21 21 / 0.04), 0 12px 32px -12px rgb(21 21 21 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(21 21 21 / 0.05), 0 24px 48px -20px rgb(21 21 21 / 0.25);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
   }
+  body {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: var(--color-champagne-soft);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-champagne-deep);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  input, select, textarea, button { font: inherit; }
+  [type="date"]::-webkit-calendar-picker-indicator,
+  [type="time"]::-webkit-calendar-picker-indicator { opacity: 0.55; cursor: pointer; }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) { .container-x { padding-inline: 1.5rem; } }
+  @media (min-width: 1024px) { .container-x { padding-inline: 2.5rem; } }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .rule-gold {
+    display: inline-block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--color-champagne);
+  }
+
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    border-radius: 2px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field::placeholder { color: #9b958c; }
+  .field:hover { border-color: #cbbfa9; }
+  .field:focus { outline: none; border-color: var(--color-champagne-deep); box-shadow: 0 0 0 3px rgb(197 164 109 / 0.22); }
+  .field[aria-invalid="true"] { border-color: var(--color-danger); }
+  .field:disabled { background: var(--color-sand); color: var(--color-stone); }
+
+  /* Swipeable rail on phones, plain grid from 640px (add sm:grid-cols-* etc.). */
+  .rail {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    padding-bottom: 0.25rem;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail > * { flex: 0 0 82%; scroll-snap-align: start; }
+  @media (min-width: 640px) {
+    .rail { display: grid; overflow: visible; margin-inline: 0; padding-inline: 0; padding-bottom: 0; }
+    .rail > * { flex: none; }
+  }
+
+  .prose-legal h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 0.75rem; }
+  .prose-legal h3 { font-size: 1.3rem; margin-top: 1.75rem; margin-bottom: 0.5rem; }
+  .prose-legal p, .prose-legal li { color: var(--color-charcoal); line-height: 1.8; }
+  .prose-legal ul { list-style: disc; padding-left: 1.25rem; margin-block: 0.75rem; }
+  .prose-legal li { margin-block: 0.35rem; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .img-zoom { transition: transform 1.2s var(--ease-luxe); }
+  .group:hover .img-zoom { transform: scale(1.04); }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-rise { animation: rise 0.9s var(--ease-luxe) both; }
+.animate-rise-delay { animation: rise 0.9s 0.15s var(--ease-luxe) both; }
+.animate-rise-delay-2 { animation: rise 0.9s 0.3s var(--ease-luxe) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { background: #fff; }
 }

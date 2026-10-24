@@ -1,14 +1,27 @@
 {
-  "name": "marrige-car-booking",
+  "name": "royal-wedding-concierge",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "test": "node --test tests/*.test.mjs",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma db push --force-reset && prisma db seed",
+    "admin:create": "node scripts/create-admin.mjs",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "lucide-react": "^1.61.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0"
@@ -17,6 +30,7 @@
     "@tailwindcss/turbopack": "^4",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "prisma": "^6.19.3",
     "tailwindcss": "^4"
   }
 }

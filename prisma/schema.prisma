@@ -1,0 +1,449 @@
+// Royal Wedding — data model.
+//
+// Local development uses SQLite so the project runs with zero setup.
+// For production switch the provider to "postgresql" and point DATABASE_URL
+// at your Postgres instance. Every field type used here is portable.
+// Status values are plain strings (documented beside each field) so the
+// schema behaves identically on both databases.
+//
+// Money is stored as whole Indian rupees (Int).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  phone        String?
+  passwordHash String
+  role         String    @default("CUSTOMER") // CUSTOMER | STAFF | ADMIN
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  bookings     Booking[]
+  auditLogs    AuditLog[]
+  payments     Payment[] @relation("RecordedPayments")
+}
+
+model CarCategory {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String?
+  sortOrder   Int     @default(0)
+  cars        Car[]
+}
+
+model Car {
+  id                 String              @id @default(cuid())
+  slug               String              @unique
+  make               String
+  model              String
+  variant            String?
+  year               Int?
+  colour             String?
+  categoryId         String
+  category           CarCategory         @relation(fields: [categoryId], references: [id])
+  luxuryLevel        String              @default("premium") // budget | premium | luxury | ultra
+  seats              Int
+  luggageBags        Int                 @default(2)
+  airConditioned     Boolean             @default(true)
+  chauffeurAvailable Boolean             @default(true)
+  decorationAvailable Boolean            @default(true)
+  description        String
+  highlights         Json?
+  isActive           Boolean             @default(true)
+  isFeatured         Boolean             @default(false)
+  isDemo             Boolean             @default(false)
+  popularity         Int                 @default(0)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  images             CarImage[]
+  pricing            VehiclePricingRule?
+  availability       CarAvailability[]
+  bookings           Booking[]           @relation("AssignedCar")
+  enquiries          Enquiry[]
+
+  @@index([categoryId])
+  @@index([isActive, luxuryLevel])
+  @@index([make])
+}
+
+model CarImage {
+  id        String  @id @default(cuid())
+  carId     String
+  car       Car     @relation(fields: [carId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String
+  credit    String?
+  sortOrder Int     @default(0)
+
+  @@index([carId, sortOrder])
+}
+
+// Pricing rule for a vehicle. The engine (src/lib/pricing.js) applies:
+// base fare (covers includedKm + includedHours) + extra km + extra hours,
+// floored at minimumFare. See README "Pricing engine" for the full formula.
+model VehiclePricingRule {
+  id                     String  @id @default(cuid())
+  carId                  String  @unique
+  car                    Car     @relation(fields: [carId], references: [id], onDelete: Cascade)
+  pricingMode            String  @default("PACKAGE") // PACKAGE | PER_KM | HOURLY (display label; formula is shared)
+  baseFare               Int     @default(0)
+  includedKm             Int     @default(0)
+  includedHours          Int     @default(0)
+  extraKmRate            Int     @default(0)
+  extraHourRate          Int     @default(0)
+  minimumFare            Int     @default(0)
+  minimumKm              Int     @default(0)
+  minimumHours           Int     @default(0)
+  driverAllowancePerDay  Int     @default(0)
+  waitingChargePerHour   Int     @default(0) // only used when extraHourRate = 0
+  freeWaitingMinutes     Int     @default(0)
+  nightCharge            Int     @default(0)
+  nightStartHour         Int     @default(22)
+  nightEndHour           Int     @default(6)
+  outstationPerDayCharge Int     @default(0)
+  outstationMinKmPerDay  Int     @default(0)
+  tollPolicy             String  @default("Tolls are billed at actuals.")
+  parkingPolicy          String  @default("Parking is billed at actuals.")
+  terms                  String?
+}
+
+// Day-level blocks. Unique (carId, date) prevents double-booking a vehicle.
+model CarAvailability {
+  id        String   @id @default(cuid())
+  carId     String
+  car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
+  date      DateTime // stored at 00:00 UTC for the calendar day
+  status    String   // BOOKED | BLOCKED
+  bookingId String?
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([carId, date])
+  @@index([date])
+}
+
+model DecorationPackage {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  price       Int
+  isActive    Boolean @default(true)
+  isDemo      Boolean @default(false)
+  sortOrder   Int     @default(0)
+}
+
+// Photography, videography and pre-wedding packages share one table,
+// distinguished by serviceType.
+model PhotoPackage {
+  id                String  @id @default(cuid())
+  slug              String  @unique
+  name              String
+  tier              String  // Essential | Classic | Premium | Cinematic Signature …
+  serviceType       String  // PHOTOGRAPHY | VIDEOGRAPHY | PHOTO_VIDEO | PRE_WEDDING
+  description       String
+  price             Int?    // null => quote only
+  quoteOnly         Boolean @default(false)
+  photographers     Int     @default(0)
+  videographers     Int     @default(0)
+  hours             Int     @default(0)
+  eventDays         Int     @default(1)
+  editedPhotos      Int?
+  videoDuration     String?
+  highlightFilm     Boolean @default(false)
+  reels             Int     @default(0)
+  album             String?
+  deliveryDays      Int?
+  travelPolicy      String?
+  extraHourRate     Int     @default(0)
+  extraDayRate      Int     @default(0)
+  inclusions        Json?
+  isActive          Boolean @default(true)
+  isDemo            Boolean @default(false)
+  sortOrder         Int     @default(0)
+}
+
+model AddOnService {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  category    String  // CAR | PHOTO | GENERAL
+  description String
+  price       Int
+  unit        String  @default("FLAT") // FLAT | PER_HOUR | PER_DAY | PER_UNIT
+  isActive    Boolean @default(true)
+  isDemo      Boolean @default(false)
+  sortOrder   Int     @default(0)
+}
+
+model WeddingPackage {
+  id                    String  @id @default(cuid())
+  slug                  String  @unique
+  name                  String
+  tagline               String
+  description           String
+  imageUrl              String?
+  inclusions            Json
+  exclusions            Json
+  durationText          String
+  suggestedCarSlug      String?
+  photoPackageSlug      String?
+  decorationSlug        String?
+  addOnSlugs            Json?
+  bundleDiscountPercent Int     @default(0) // applied only when > 0
+  quoteOnly             Boolean @default(false)
+  isActive              Boolean @default(true)
+  isDemo                Boolean @default(false)
+  sortOrder             Int     @default(0)
+}
+
+model PortfolioItem {
+  id        String   @id @default(cuid())
+  title     String
+  category  String   // wedding | candid | pre-wedding | films | drone | reels | albums
+  imageUrl  String
+  alt       String
+  isDemo    Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Vendor {
+  id           String          @id @default(cuid())
+  name         String
+  type         String          // CAR_OPERATOR | PHOTOGRAPHER | VIDEOGRAPHER | DECORATOR
+  phone        String?
+  email        String?
+  crewCapacity Int             @default(1)
+  notes        String?
+  isActive     Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  services     VendorService[]
+  blockedDates VendorBlockedDate[]
+  bookings     Booking[]
+}
+
+model VendorService {
+  id          String  @id @default(cuid())
+  vendorId    String
+  vendor      Vendor  @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  serviceType String
+  description String?
+}
+
+model VendorBlockedDate {
+  id       String   @id @default(cuid())
+  vendorId String
+  vendor   Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  date     DateTime
+  note     String?
+
+  @@unique([vendorId, date])
+}
+
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  description String?
+  type        String    // PERCENT | FLAT
+  value       Int
+  minSubtotal Int       @default(0)
+  maxDiscount Int?
+  appliesTo   String    @default("ALL") // ALL | CAR | PHOTOGRAPHY | COMBINED
+  validFrom   DateTime?
+  validTo     DateTime?
+  usageLimit  Int?
+  usedCount   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model Booking {
+  id                String           @id @default(cuid())
+  reference         String           @unique
+  idempotencyKey    String           @unique
+  userId            String?
+  user              User?            @relation(fields: [userId], references: [id])
+  status            String           @default("PENDING") // PENDING | CONFIRMED | COMPLETED | CANCELLED
+  customerRequest   String?          // RESCHEDULE | CANCELLATION (customer-raised, pending review)
+  serviceType       String           // CAR | PHOTOGRAPHY | VIDEOGRAPHY | COMBINED
+  customerName      String
+  phone             String
+  email             String
+  eventDate         DateTime
+  eventType         String
+  notes             String?
+  subtotal          Int
+  discountTotal     Int              @default(0)
+  taxTotal          Int              @default(0)
+  total             Int
+  advanceAmount     Int              @default(0)
+  advanceApproved   Boolean          @default(false)
+  amountPaid        Int              @default(0)
+  quoteRequired     Boolean          @default(false)
+  distanceSource    String?          // LIVE_ROUTE | MANUAL | NONE
+  couponCode        String?
+  pricingInputs     Json
+  priceBreakdown    Json
+  assignedCarId     String?
+  assignedCar       Car?             @relation("AssignedCar", fields: [assignedCarId], references: [id])
+  assignedVendorId  String?
+  assignedVendor    Vendor?          @relation(fields: [assignedVendorId], references: [id])
+  internalNotes     String?
+  termsAcceptedAt   DateTime
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  lineItems         BookingLineItem[]
+  events            EventDetail[]
+  payments          Payment[]
+  notifications     NotificationLog[]
+
+  @@index([status])
+  @@index([eventDate])
+  @@index([email])
+  @@index([phone])
+  @@index([createdAt])
+}
+
+model BookingLineItem {
+  id          String  @id @default(cuid())
+  bookingId   String
+  booking     Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  kind        String  // VEHICLE | DECORATION | PHOTO_PACKAGE | ADDON | ADJUSTMENT
+  label       String
+  description String?
+  quantity    Int     @default(1)
+  amount      Int
+  refSlug     String?
+  sortOrder   Int     @default(0)
+
+  @@index([bookingId])
+}
+
+model EventDetail {
+  id            String   @id @default(cuid())
+  bookingId     String
+  booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  name          String   // Wedding, Mehendi, Haldi, Reception, Pre-wedding …
+  date          DateTime
+  startTime     String?
+  venue         String?
+  pickupAddress String?
+  stops         Json?
+  coverageHours Int?
+  passengers    Int?
+  sortOrder     Int      @default(0)
+
+  @@index([bookingId])
+  @@index([date])
+}
+
+model Payment {
+  id                String    @id @default(cuid())
+  bookingId         String
+  booking           Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  provider          String    // RAZORPAY | MANUAL
+  providerOrderId   String?   @unique
+  providerPaymentId String?   @unique
+  amount            Int
+  status            String    // CREATED | CAPTURED | FAILED | REFUNDED | PARTIALLY_REFUNDED
+  method            String?
+  reference         String?
+  refundedAmount    Int       @default(0)
+  failureReason     String?
+  notes             String?
+  recordedById      String?
+  recordedBy        User?     @relation("RecordedPayments", fields: [recordedById], references: [id])
+  verifiedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([bookingId])
+  @@index([status])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  name        String
+  rating      Int
+  text        String
+  eventDate   DateTime?
+  source      String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+// A place customers can choose as pickup or venue: a city/town or a village.
+// Cities marked isBase are garages the cars start from; when
+// business.garageToGarage is on, travel from/to the nearest garage is billed.
+model ServiceLocation {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  city        String  // the place's name (village or city)
+  kind        String  @default("CITY") // CITY | VILLAGE
+  parentCity  String? // for villages: the city / tehsil it belongs to
+  isBase      Boolean @default(false)  // a garage the cars start from
+  latitude    Float?  // optional exact location; otherwise the name is looked up
+  longitude   Float?
+  region      String? // district & state used for the lookup, e.g. "Nuh, Haryana"
+  description String?
+  isActive    Boolean @default(true)
+  isDemo      Boolean @default(false)
+  sortOrder   Int     @default(0)
+}
+
+model Enquiry {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  subject   String
+  message   String
+  eventDate DateTime?
+  carId     String?
+  car       Car?     @relation(fields: [carId], references: [id], onDelete: SetNull)
+  source    String   @default("contact") // contact | car | photography | quote
+  status    String   @default("NEW")     // NEW | CONTACTED | CLOSED
+  createdAt DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  data      Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model NotificationLog {
+  id        String   @id @default(cuid())
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  channel   String   // EMAIL | WHATSAPP
+  template  String
+  recipient String
+  status    String   // SENT | SKIPPED | FAILED
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([bookingId])
+}
